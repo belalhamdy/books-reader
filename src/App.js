@@ -22,7 +22,14 @@ class BooksApp extends Component {
     componentDidMount() {
         this.refresh()
     }
-    searchBooks = (query,thenFunction) => {BooksAPI.search(query).then((books) => thenFunction(books))}
+    matchShelfs = (searchBooks) => {
+        if (!searchBooks || searchBooks.error) return []
+        let ret = searchBooks.map((book) => {
+            let originalBook = this.state.books.find(originalBook => originalBook.id === book.id);
+            return Object.assign({}, book, {shelf: `${originalBook? originalBook.shelf: "none"}` })})
+    return ret;
+    }
+    searchBooks = (query,thenFunction) => {BooksAPI.search(query).then((books) =>thenFunction(this.matchShelfs(books)))}
     refresh = () => {BooksAPI.getAll().then((books) => this.setState(() => ({books: books})))}
     updateShelf = (book,newShelf) => {
         BooksAPI.update(book,newShelf).then(this.refresh)
@@ -36,10 +43,10 @@ class BooksApp extends Component {
         return this.state.books.filter(book => book.shelf.toLowerCase().includes(shelf.toLowerCase()) && book.shelf.length === shelf.length)
     };
     renderBooks = (booksList, shelfName) => {
-
+        if (booksList == null || booksList.length <= 0) return <div className="bookshelf" key = {shelfName} />
         return (
             <div className="bookshelf" key = {shelfName}>
-                {booksList.length > 0 ? (
+                {booksList && booksList.length > 0 ? (
                     <div>
                     <h2 className="bookshelf-title">{shelfName}</h2>
                     <div className="bookshelf-books">

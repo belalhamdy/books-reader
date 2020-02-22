@@ -13,7 +13,6 @@ class Book extends Component{
     }
     render() {
     const {book} = this.props;
-        console.log(book)
     return ( <div className="book">
         <div className="book-top">
             <div className="book-cover" style={{
@@ -22,12 +21,13 @@ class Book extends Component{
     backgroundImage: `url(${(book.imageLinks && book.imageLinks.smallThumbnail)?book.imageLinks.smallThumbnail:"https://i.imgur.com/sJ3CT4V.gif"})`
 }}/>
             <div className="book-shelf-changer">
-                <select onChange={this.handleUpdateShelf}>
-                    <option value="move" disabled = {true}>Move to...</option>
-                    <option value="currentlyReading" hidden={book.shelf === "currentlyReading"}>Currently Reading</option>
-                    <option value="wantToRead" hidden={book.shelf === "wantToRead"}>Want to Read</option>
-                    <option value="read" hidden={book.shelf === "read"}>Read</option>
-                    <option value="none" hidden={book.shelf === "none" || !book.shelf}>None (Remove)</option>
+                {console.log(book)}
+                <select  defaultValue={book.shelf || "none"} onChange={this.handleUpdateShelf}>
+                    <option  value="move" disabled = {true}>Move to...</option>
+                    <option  value="currentlyReading">{book.shelf === "currentlyReading"? String.fromCharCode(10003):""} Currently Reading</option>
+                    <option  value="wantToRead">{book.shelf === "wantToRead"? String.fromCharCode(10003):""} Want to Read</option>
+                    <option  value="read" >{book.shelf === "read"? String.fromCharCode(10003):""} Read</option>
+                    <option value="none">{(book.shelf === "none" || !book.shelf) ? String.fromCharCode(10003):""}  None</option>
                 </select>
             </div>
         </div>
