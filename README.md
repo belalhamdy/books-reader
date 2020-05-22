@@ -1,4 +1,4 @@
-# MyReads Project
+# Book Reader Project
 A React JS Project for Udacity React Development Nano-degree
 
 * Run `npm install`
